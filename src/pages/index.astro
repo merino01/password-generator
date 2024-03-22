@@ -102,32 +102,29 @@ import IconGithub from '../Icons/IconGithub.astro'
   }
 
   function handleGenerate() {
+    const charMap = {
+      [CHARS_OPTIONS.lowercase]: letrasMinusculas,
+      [CHARS_OPTIONS.uppercase]: letrasMayusculas,
+      [CHARS_OPTIONS.numbers]: numeros,
+      [CHARS_OPTIONS.symbols]: simbolos
+    }
+
     let todosCaracteres = ''
-    const validChars = passOptions.charsToUse
-
-    if (validChars.includes(CHARS_OPTIONS.lowercase))
-      todosCaracteres += letrasMinusculas
-    if (validChars.includes(CHARS_OPTIONS.uppercase))
-      todosCaracteres += letrasMayusculas
-    if (validChars.includes(CHARS_OPTIONS.numbers)) todosCaracteres += numeros
-    if (validChars.includes(CHARS_OPTIONS.symbols)) todosCaracteres += simbolos
-
     let password = ''
-    if (validChars.includes(CHARS_OPTIONS.lowercase))
-      password +=
-        letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)]
-    if (validChars.includes(CHARS_OPTIONS.uppercase))
-      password +=
-        letrasMayusculas[Math.floor(Math.random() * letrasMayusculas.length)]
-    if (validChars.includes(CHARS_OPTIONS.numbers))
-      password += numeros[Math.floor(Math.random() * numeros.length)]
-    if (validChars.includes(CHARS_OPTIONS.symbols))
-      password += simbolos[Math.floor(Math.random() * simbolos.length)]
+
+    for (const option of passOptions.charsToUse) {
+      const chars = charMap[option]
+      if (chars) {
+        todosCaracteres += chars
+        password += chars[Math.floor(Math.random() * chars.length)]
+      }
+    }
 
     for (let i = password.length; i < passOptions.length; i++) {
       password +=
         todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)]
     }
+
     password
       .split('')
       .sort(() => {
