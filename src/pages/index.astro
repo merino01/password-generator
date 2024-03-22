@@ -1,6 +1,7 @@
 ---
 import Form from '../components/Form.astro'
 import PasswordContainer from '../components/PasswordContainer.astro'
+import IconGithub from '../Icons/IconGithub.astro'
 ---
 
 <html lang='en'>
@@ -25,6 +26,14 @@ import PasswordContainer from '../components/PasswordContainer.astro'
     <main
       class='flex items-center justify-center w-[100vw] h-[100dvh] flex-col gap-6 bg-gray-800'
     >
+      <a
+        class='text-white text-2xl absolute top-4 right-4'
+        href='https://github.com/guillermo403/password-generator'
+        target='_blank'
+      >
+        <IconGithub />
+      </a>
+
       <Form />
       <PasswordContainer />
     </main>
