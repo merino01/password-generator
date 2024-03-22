@@ -1,5 +1,6 @@
 ---
-import IconCopy from '../Icons/IconCopy.astro'
+import Form from '../components/Form.astro'
+import PasswordContainer from '../components/PasswordContainer.astro'
 ---
 
 <html lang='en'>
@@ -24,36 +25,8 @@ import IconCopy from '../Icons/IconCopy.astro'
     <main
       class='flex items-center justify-center w-[100vw] h-[100dvh] flex-col gap-2 bg-gray-800'
     >
-      <input
-        type='text'
-        name='length'
-        placeholder='Password length'
-        class='bg-neutral-700 text-slate-200 px-4 py-2 rounded-sm w-[172px] select-none'
-        autocomplete='off'
-      />
-
-      <button
-        id='generate-password'
-        class='bg-green-300 hover:bg-green-400 transition px-4 py-2 rounded-sm select-none'
-      >
-        Generate password
-      </button>
-
-      <div
-        class='min-h-[48px] min-w-[172px] max-w-md bg-neutral-700 text-slate-200 py-3 pl-4 pr-8 rounded-sm invisible relative'
-        id='password-container'
-      >
-        <span
-          id='password'
-          class='w-full truncate block'
-        ></span>
-        <button
-          class='cursor-pointer absolute right-2 top-2'
-          id='copy-button'
-        >
-          <IconCopy />
-        </button>
-      </div>
+      <Form />
+      <PasswordContainer />
     </main>
   </body>
 </html>
@@ -62,45 +35,87 @@ import IconCopy from '../Icons/IconCopy.astro'
   import Toastify from 'toastify-js'
   import 'toastify-js/src/toastify.css'
 
-  const $generateButton = document.querySelector('button#generate-password')
+  const letrasMayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz'
+  const numeros = '0123456789'
+  const simbolos = '!@#$%^&*()_+~`|}{[]:;?><,./-='
+
   const $password = document.querySelector('span#password') as HTMLSpanElement
   const $passwordContainer = document.querySelector(
     'div#password-container'
   ) as HTMLDivElement
   const $copyButton = document.querySelector('button#copy-button')
-  const $passwordLength = document.querySelector(
-    "input[name='length']"
-  ) as HTMLInputElement
 
-  $generateButton?.addEventListener('click', handleGenerate)
   $copyButton?.addEventListener('click', handleCopy)
-  $passwordLength?.addEventListener('input', (ev) => {
-    const target = ev.target as HTMLInputElement
-    const value = target.value
-    if (isNaN(Number(value))) target.value = value.slice(0, value.length - 1)
-  })
-  $passwordLength?.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Enter') handleGenerate()
-  })
+  document.querySelector('form')?.addEventListener('submit', handleSubmit)
+
+  const CHARS_OPTIONS = {
+    lowercase: 'lowercase',
+    uppercase: 'uppercase',
+    numbers: 'numbers',
+    symbols: 'symbols'
+  }
+  const passOptions: {
+    charsToUse: string[]
+    length: number
+  } = {
+    charsToUse: [],
+    length: 0
+  }
+
+  function handleSubmit(ev: Event) {
+    ev.preventDefault()
+    const $form = ev.target as HTMLFormElement
+    const formData = new FormData($form)
+    const data = Object.fromEntries(formData)
+    const validChars = document.querySelectorAll(
+      "input[name='valid-characters']:checked"
+    ) as NodeListOf<HTMLInputElement>
+    validChars.forEach((input) => {
+      const value = input.value as keyof typeof CHARS_OPTIONS
+      if (value in CHARS_OPTIONS)
+        passOptions.charsToUse.push(CHARS_OPTIONS[value])
+    })
+
+    if (passOptions.charsToUse.length === 0)
+      passOptions.charsToUse = [
+        CHARS_OPTIONS.lowercase,
+        CHARS_OPTIONS.uppercase,
+        CHARS_OPTIONS.numbers,
+        CHARS_OPTIONS.symbols
+      ]
+
+    if (data['pass-length'] && !isNaN(Number(data['pass-length'])))
+      passOptions.length = Number(data['pass-length'])
+    else passOptions.length = 8
+
+    handleGenerate()
+  }
 
   function handleGenerate() {
-    const length =
-      Number($passwordLength.value) || Math.floor(Math.random() * (15 - 8)) + 8
+    let todosCaracteres = ''
+    const validChars = passOptions.charsToUse
 
-    const letrasMayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz'
-    const numeros = '0123456789'
-    const simbolos = '!@#$%^&*()_+~`|}{[]:;?><,./-='
-    const todosCaracteres =
-      letrasMayusculas + letrasMinusculas + numeros + simbolos
+    if (validChars.includes(CHARS_OPTIONS.lowercase))
+      todosCaracteres += letrasMinusculas
+    if (validChars.includes(CHARS_OPTIONS.uppercase))
+      todosCaracteres += letrasMayusculas
+    if (validChars.includes(CHARS_OPTIONS.numbers)) todosCaracteres += numeros
+    if (validChars.includes(CHARS_OPTIONS.symbols)) todosCaracteres += simbolos
+
     let password = ''
-    password +=
-      letrasMayusculas[Math.floor(Math.random() * letrasMayusculas.length)]
-    password +=
-      letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)]
-    password += numeros[Math.floor(Math.random() * numeros.length)]
-    password += simbolos[Math.floor(Math.random() * simbolos.length)]
-    for (let i = 4; i < length; i++) {
+    if (validChars.includes(CHARS_OPTIONS.lowercase))
+      password +=
+        letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)]
+    if (validChars.includes(CHARS_OPTIONS.uppercase))
+      password +=
+        letrasMayusculas[Math.floor(Math.random() * letrasMayusculas.length)]
+    if (validChars.includes(CHARS_OPTIONS.numbers))
+      password += numeros[Math.floor(Math.random() * numeros.length)]
+    if (validChars.includes(CHARS_OPTIONS.symbols))
+      password += simbolos[Math.floor(Math.random() * simbolos.length)]
+
+    for (let i = password.length; i < passOptions.length; i++) {
       password +=
         todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)]
     }
@@ -110,9 +125,14 @@ import IconCopy from '../Icons/IconCopy.astro'
         return 0.5 - Math.random()
       })
       .join('')
-    if (password.length > length) password = password.slice(0, length)
+    if (password.length > passOptions.length)
+      password = password.slice(0, passOptions.length)
     $password.textContent = password
     $passwordContainer.classList.remove('invisible')
+
+    passOptions.charsToUse = []
+    passOptions.length = 0
+
     handleCopy()
   }
 

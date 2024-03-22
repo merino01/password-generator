@@ -1,0 +1,76 @@
+<form class='flex flex-col gap-4'>
+  <input
+    type='text'
+    name='pass-length'
+    placeholder='Password length'
+    class='bg-neutral-700 text-slate-200 px-4 py-2 rounded-sm w-[172px] select-none'
+    autocomplete='off'
+  />
+
+  <div class='flex flex-col'>
+    <div class='flex items-center gap-4'>
+      <input
+        type='checkbox'
+        name='valid-characters'
+        value='lowercase'
+        class='cursor-pointer'
+      />
+      <label class='text-zinc-300'>Lowercase</label>
+    </div>
+
+    <div class='flex items-center gap-4'>
+      <input
+        type='checkbox'
+        name='valid-characters'
+        value='uppercase'
+        class='cursor-pointer'
+      />
+      <label class='text-zinc-300'>Uppercase</label>
+    </div>
+
+    <div class='flex items-center gap-4'>
+      <input
+        type='checkbox'
+        name='valid-characters'
+        value='numbers'
+        class='cursor-pointer'
+      />
+      <label class='text-zinc-300'>Numbers</label>
+    </div>
+
+    <div class='flex items-center gap-4'>
+      <input
+        type='checkbox'
+        name='valid-characters'
+        value='symbols'
+        class='cursor-pointer'
+      />
+      <label class='text-zinc-300'>Symbols</label>
+    </div>
+  </div>
+
+  <button
+    id='generate-password'
+    class='bg-green-300 hover:bg-green-400 transition px-4 py-2 rounded-sm select-none'
+  >
+    Generate password
+  </button>
+</form>
+
+<script>
+  const $passwordLength = document.querySelector(
+    "input[name='pass-length']"
+  ) as HTMLInputElement
+
+  $passwordLength?.addEventListener('input', (ev) => {
+    const target = ev.target as HTMLInputElement
+    const value = target.value
+    const num = Number(value)
+
+    if (value === '') return
+
+    if (isNaN(num)) target.value = value.slice(0, value.length - 1)
+    if (num < 1) target.value = '1'
+    if (num > 1500000) target.value = '1500000'
+  })
+</script>
