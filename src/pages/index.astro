@@ -1,0 +1,131 @@
+---
+import IconCopy from '../Icons/IconCopy.astro'
+---
+
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <link
+      rel='icon'
+      type='image/svg+xml'
+      href='/favicon.svg'
+    />
+    <meta
+      name='viewport'
+      content='width=device-width'
+    />
+    <meta
+      name='generator'
+      content={Astro.generator}
+    />
+    <title>Password generator</title>
+  </head>
+  <body>
+    <main
+      class='flex items-center justify-center w-[100vw] h-[100dvh] flex-col gap-2 bg-gray-800'
+    >
+      <input
+        type='text'
+        name='length'
+        placeholder='Password length'
+        class='bg-neutral-700 text-slate-200 px-4 py-2 rounded-sm w-[172px] select-none'
+        autocomplete='off'
+      />
+
+      <button
+        id='generate-password'
+        class='bg-green-300 hover:bg-green-400 transition px-4 py-2 rounded-sm select-none'
+      >
+        Generate password
+      </button>
+
+      <div
+        class='min-h-[48px] min-w-[172px] max-w-md bg-neutral-700 text-slate-200 py-3 pl-4 pr-8 rounded-sm invisible relative'
+        id='password-container'
+      >
+        <span
+          id='password'
+          class='w-full truncate block'
+        ></span>
+        <button
+          class='cursor-pointer absolute right-2 top-2'
+          id='copy-button'
+        >
+          <IconCopy />
+        </button>
+      </div>
+    </main>
+  </body>
+</html>
+
+<script>
+  import Toastify from 'toastify-js'
+  import 'toastify-js/src/toastify.css'
+
+  const $generateButton = document.querySelector('button#generate-password')
+  const $password = document.querySelector('span#password') as HTMLSpanElement
+  const $passwordContainer = document.querySelector(
+    'div#password-container'
+  ) as HTMLDivElement
+  const $copyButton = document.querySelector('button#copy-button')
+  const $passwordLength = document.querySelector(
+    "input[name='length']"
+  ) as HTMLInputElement
+
+  $generateButton?.addEventListener('click', handleGenerate)
+  $copyButton?.addEventListener('click', handleCopy)
+  $passwordLength?.addEventListener('input', (ev) => {
+    const target = ev.target as HTMLInputElement
+    const value = target.value
+    if (isNaN(Number(value))) target.value = value.slice(0, value.length - 1)
+  })
+  $passwordLength?.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') handleGenerate()
+  })
+
+  function handleGenerate() {
+    const length =
+      Number($passwordLength.value) || Math.floor(Math.random() * (15 - 8)) + 8
+
+    const letrasMayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz'
+    const numeros = '0123456789'
+    const simbolos = '!@#$%^&*()_+~`|}{[]:;?><,./-='
+    const todosCaracteres =
+      letrasMayusculas + letrasMinusculas + numeros + simbolos
+    let password = ''
+    password +=
+      letrasMayusculas[Math.floor(Math.random() * letrasMayusculas.length)]
+    password +=
+      letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)]
+    password += numeros[Math.floor(Math.random() * numeros.length)]
+    password += simbolos[Math.floor(Math.random() * simbolos.length)]
+    for (let i = 4; i < length; i++) {
+      password +=
+        todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)]
+    }
+    password
+      .split('')
+      .sort(() => {
+        return 0.5 - Math.random()
+      })
+      .join('')
+    if (password.length > length) password = password.slice(0, length)
+    $password.textContent = password
+    $passwordContainer.classList.remove('invisible')
+    handleCopy()
+  }
+
+  function handleCopy() {
+    navigator.clipboard.writeText($password.textContent ?? '')
+    Toastify({
+      text: 'Password copied to clipboard',
+      duration: 3000,
+      gravity: 'top',
+      position: 'center',
+      style: {
+        background: 'linear-gradient(to right, #00b09b, #96c93d)'
+      }
+    }).showToast()
+  }
+</script>
