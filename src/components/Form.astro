@@ -14,6 +14,7 @@
         name='valid-characters'
         value='lowercase'
         class='cursor-pointer'
+        checked
       />
       <label class='text-zinc-300'>Lowercase</label>
     </div>
@@ -24,6 +25,7 @@
         name='valid-characters'
         value='uppercase'
         class='cursor-pointer'
+        checked
       />
       <label class='text-zinc-300'>Uppercase</label>
     </div>
@@ -34,6 +36,7 @@
         name='valid-characters'
         value='numbers'
         class='cursor-pointer'
+        checked
       />
       <label class='text-zinc-300'>Numbers</label>
     </div>
@@ -44,6 +47,7 @@
         name='valid-characters'
         value='symbols'
         class='cursor-pointer'
+        checked
       />
       <label class='text-zinc-300'>Symbols</label>
     </div>
@@ -72,5 +76,20 @@
     if (isNaN(num)) target.value = value.slice(0, value.length - 1)
     if (num < 1) target.value = '1'
     if (num > 1500000) target.value = '1500000'
+  })
+
+  const $checkboxes = document.querySelectorAll(
+    "input[name='valid-characters']"
+  )
+  $checkboxes.forEach(($el) => {
+    $el.addEventListener('change', (ev) => {
+      const target = ev.target as HTMLInputElement
+      const isSomeChecked = Array.from($checkboxes).some(
+        ($el) => ($el as HTMLInputElement).checked
+      )
+      if (!isSomeChecked) {
+        target.checked = true
+      }
+    })
   })
 </script>

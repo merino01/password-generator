@@ -86,14 +86,6 @@ import IconGithub from '../Icons/IconGithub.astro'
         passOptions.charsToUse.push(CHARS_OPTIONS[value])
     })
 
-    if (passOptions.charsToUse.length === 0)
-      passOptions.charsToUse = [
-        CHARS_OPTIONS.lowercase,
-        CHARS_OPTIONS.uppercase,
-        CHARS_OPTIONS.numbers,
-        CHARS_OPTIONS.symbols
-      ]
-
     if (data['pass-length'] && !isNaN(Number(data['pass-length'])))
       passOptions.length = Number(data['pass-length'])
     else passOptions.length = 8
