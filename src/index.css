@@ -8,3 +8,7 @@
   min-height: 100dvh;
   width: 100vw;
 }
+
+.menu-option {
+  @apply transition-all cursor-pointer opacity-80 hover:opacity-100;
+}
