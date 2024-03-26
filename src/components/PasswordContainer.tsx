@@ -11,12 +11,12 @@ const PasswordContainer = ({ password, onCopy }: Props) => {
       className='min-h-[48px] min-w-[172px] max-w-sm bg-neutral-700 text-slate-200 py-3 pl-4 pr-8 rounded-sm relative'
     >
       <span
-        className='w-full truncate block'
+        className='block w-full truncate'
       >
         {password}
       </span>
       <button
-        className='cursor-pointer absolute right-2 top-2'
+        className='absolute cursor-pointer right-2 top-4'
         onClick={() => onCopy(password)}
       >
         <IconCopy />

@@ -73,6 +73,7 @@ const Form = ({ onSubmit, onChange }: Props) => {
       <div className='flex flex-col'>
         <div className='flex items-center gap-4'>
           <input
+            id="chars-lowercase"
             type='checkbox'
             name='valid-characters'
             value='lowercase'
@@ -80,11 +81,12 @@ const Form = ({ onSubmit, onChange }: Props) => {
             checked={lowercase}
             onChange={handleCheckboxesChange}
           />
-          <label className='text-zinc-300'>Lowercase</label>
+          <label htmlFor="chars-lowercase" className='text-zinc-300'>Lowercase</label>
         </div>
 
         <div className='flex items-center gap-4'>
           <input
+            id="chars-uppercase"
             type='checkbox'
             name='valid-characters'
             value='uppercase'
@@ -92,11 +94,12 @@ const Form = ({ onSubmit, onChange }: Props) => {
             checked={uppercase}
             onChange={handleCheckboxesChange}
           />
-          <label className='text-zinc-300'>Uppercase</label>
+          <label htmlFor="chars-uppercase" className='text-zinc-300'>Uppercase</label>
         </div>
 
         <div className='flex items-center gap-4'>
           <input
+            id="chars-numbers"
             type='checkbox'
             name='valid-characters'
             value='numbers'
@@ -104,11 +107,12 @@ const Form = ({ onSubmit, onChange }: Props) => {
             checked={numbers}
             onChange={handleCheckboxesChange}
           />
-          <label className='text-zinc-300'>Numbers</label>
+          <label htmlFor="chars-numbers" className='text-zinc-300'>Numbers</label>
         </div>
 
         <div className='flex items-center gap-4'>
           <input
+            id="chars-symbols"
             type='checkbox'
             name='valid-characters'
             value='symbols'
@@ -116,12 +120,12 @@ const Form = ({ onSubmit, onChange }: Props) => {
             checked={symbols}
             onChange={handleCheckboxesChange}
           />
-          <label className='text-zinc-300'>Symbols</label>
+          <label htmlFor="chars-symbols" className='text-zinc-300'>Symbols</label>
         </div>
       </div>
 
       <button
-        className='bg-green-300 hover:bg-green-400 transition px-4 py-2 rounded-sm select-none'
+        className='px-4 py-2 transition bg-green-300 rounded-sm select-none hover:bg-green-400'
         type="submit"
       >
         Generate password
