@@ -3,7 +3,14 @@ const MINUSCULAS = 'abcdefghijklmnopqrstuvwxyz'
 const NUMEROS = '0123456789'
 const SIMBOLOS = '!@#$%^&*()_+~`|}{[]:;?><,./-='
 
-function generatePassword (passwordLength: number, validCharacters: string[]) {
+const allCharacters = ['lowercase', 'uppercase', 'numbers', 'symbols']
+
+interface Props {
+  length?: number
+  validCharacters?: string[]
+}
+
+function generatePassword ({ length = 12, validCharacters = allCharacters }: Props) {  
   const charMap: { [key: string]: string } = {
     'lowercase': MINUSCULAS,
     'uppercase': MAYUSCULAS,
@@ -23,7 +30,7 @@ function generatePassword (passwordLength: number, validCharacters: string[]) {
     }
   }
 
-  for (let i = password.length; i < passwordLength; i++) {
+  for (let i = password.length; i < length; i++) {
     password +=
       todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)]
   }
@@ -34,8 +41,8 @@ function generatePassword (passwordLength: number, validCharacters: string[]) {
       return 0.5 - Math.random()
     })
     .join('')
-  if (password.length > passwordLength)
-    password = password.slice(0, passwordLength)
+  if (password.length > length)
+    password = password.slice(0, length)
 
   return password
 }

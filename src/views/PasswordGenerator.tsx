@@ -4,8 +4,10 @@ import PasswordContainer from '../components/PasswordContainer'
 import generatePassword from '../components/lib/generate-password'
 import copy from '../components/lib/copy'
 
+const defaultPassword = generatePassword({})
+
 function PasswordGenerator () {  
-  const [password, setPassword] = useState<string>('')
+  const [password, setPassword] = useState<string>(defaultPassword)
   
   useEffect(() => {
     copy(password)
@@ -16,7 +18,7 @@ function PasswordGenerator () {
     const validCharacters = formData.getAll('valid-characters') as string[]
     const passwordLength = Number(formData.get('pass-length')) || 12
 
-    const password = generatePassword(passwordLength, validCharacters)
+    const password = generatePassword({ length: passwordLength, validCharacters })
     setPassword(password)
   }
   
