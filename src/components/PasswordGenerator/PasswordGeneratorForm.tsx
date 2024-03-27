@@ -7,11 +7,34 @@ interface Props {
   onChange?: () => void
 }
 
+const getFromLocaleStorage = () => {  
+  const lowercase = localStorage.getItem('l')
+  const uppercase = localStorage.getItem('u')
+  const numbers = localStorage.getItem('n')
+  const symbols = localStorage.getItem('s')
+
+  if (![lowercase, uppercase, numbers, symbols].some((el) => el === 'true'))
+    return {
+      lowercase: true,
+      uppercase: true,
+      numbers: true,
+      symbols: true
+    }
+  else
+    return {
+      lowercase: lowercase === 'true',
+      uppercase: uppercase === 'true',
+      numbers: numbers === 'true',
+      symbols: symbols === 'true'
+    }
+}
+
 const Form = ({ onSubmit, onChange }: Props) => {
-  const [lowercase, setLowercase] = useState<boolean>(true)
-  const [uppercase, setUppercase] = useState<boolean>(true)
-  const [numbers, setNumbers] = useState<boolean>(true)
-  const [symbols, setSymbols] = useState<boolean>(true)
+  const localData = getFromLocaleStorage()
+  const [lowercase, setLowercase] = useState<boolean>(localData.lowercase)
+  const [uppercase, setUppercase] = useState<boolean>(localData.uppercase)
+  const [numbers, setNumbers] = useState<boolean>(localData.numbers)
+  const [symbols, setSymbols] = useState<boolean>(localData.symbols)
 
   const handleLengthInput = (ev: React.FormEvent<HTMLInputElement>) => {
     const target = ev.target as HTMLInputElement
@@ -27,7 +50,7 @@ const Form = ({ onSubmit, onChange }: Props) => {
     onChange && onChange()
   }
 
-  const handleCheckboxesChange = (ev: React.FormEvent<HTMLInputElement>) => {
+  const handleCheckboxesChange = (ev: React.FormEvent<HTMLInputElement>) => {    
     const states = {
       lowercase,
       uppercase,

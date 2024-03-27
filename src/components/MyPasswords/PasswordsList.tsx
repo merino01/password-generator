@@ -12,7 +12,7 @@ const PasswordsList = ({ passwords }: Props) => {
       {
         passwords.map((password) => (
           <Accordion key={password.id} title={password.platform}>
-            <div className="flex flex-col items-center justify-between md:flex-row">
+            <div className="flex flex-col items-start justify-between md:items-center md:flex-row">
               <span>{password.mail}</span>
               <span
                 className="cursor-pointer"

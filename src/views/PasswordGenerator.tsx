@@ -6,10 +6,22 @@ import copy from '../components/lib/copy'
 
 const defaultPassword = generatePassword({})
 
-function PasswordGenerator () {  
-  const [password, setPassword] = useState<string>(defaultPassword)
+const getPasswordFromLocalStoage = () => {
+  const password = localStorage.getItem('lp-$1')
+  if (!password) return defaultPassword
+  return password
+}
+
+const setPasswordToLocalStorage = (password: string) => {
+  localStorage.setItem('lp-$1', password)
+}
+
+function PasswordGenerator () {
+  const [password, setPassword] = useState<string>(getPasswordFromLocalStoage())
   
   useEffect(() => {
+    if (password === getPasswordFromLocalStoage()) return
+    setPasswordToLocalStorage(password)
     copy(password)
   }, [password])
   
@@ -20,6 +32,20 @@ function PasswordGenerator () {
 
     const password = generatePassword({ length: passwordLength, validCharacters })
     setPassword(password)
+
+    const localStorageMap: { [key: string]: string} = {
+      lowercase: 'l',
+      uppercase: 'u',
+      numbers: 'n',
+      symbols: 's'
+    }
+    Object.keys(localStorageMap).forEach((key) => {
+      if (validCharacters.includes(key)) {
+        localStorage.setItem(localStorageMap[key], 'true')
+      } else {
+        localStorage.setItem(localStorageMap[key], 'false')
+      }
+    })
   }
   
   const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
