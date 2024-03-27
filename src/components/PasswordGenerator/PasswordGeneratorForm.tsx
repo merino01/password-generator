@@ -1,4 +1,6 @@
 import { useState } from "react"
+import CustomInput from "../common/CustomInput"
+import CustomCheckbox from "../common/CustomCheckbox"
 
 interface Props {
   onSubmit: (ev: React.FormEvent<HTMLFormElement>) => void
@@ -61,67 +63,46 @@ const Form = ({ onSubmit, onChange }: Props) => {
   
   return (
     <form className='flex flex-col gap-4' id="generate-form" onSubmit={onSubmit}>
-      <input
+      <CustomInput
         type='text'
         name='pass-length'
         placeholder='Password length'
-        className='bg-neutral-700 text-slate-200 px-4 py-2 rounded-sm w-[172px] select-none'
-        autoComplete='off'
+        autocomplete='off'
         onInput={handleLengthInput}
       />
 
       <div className='flex flex-col'>
-        <div className='flex items-center gap-4'>
-          <input
-            id="chars-lowercase"
-            type='checkbox'
-            name='valid-characters'
-            value='lowercase'
-            className='cursor-pointer'
-            checked={lowercase}
-            onChange={handleCheckboxesChange}
-          />
-          <label htmlFor="chars-lowercase" className='text-zinc-300'>Lowercase</label>
-        </div>
+        <CustomCheckbox
+          id='chars-lowercase'
+          label='lowercase'
+          checked={lowercase}
+          value="lowercase"
+          onChange={handleCheckboxesChange}
+        />
 
-        <div className='flex items-center gap-4'>
-          <input
-            id="chars-uppercase"
-            type='checkbox'
-            name='valid-characters'
-            value='uppercase'
-            className='cursor-pointer'
-            checked={uppercase}
-            onChange={handleCheckboxesChange}
-          />
-          <label htmlFor="chars-uppercase" className='text-zinc-300'>Uppercase</label>
-        </div>
+        <CustomCheckbox
+          id='chars-uppercase'
+          label='uppercase'
+          checked={uppercase}
+          value="uppercase"
+          onChange={handleCheckboxesChange}
+        />
 
-        <div className='flex items-center gap-4'>
-          <input
-            id="chars-numbers"
-            type='checkbox'
-            name='valid-characters'
-            value='numbers'
-            className='cursor-pointer'
-            checked={numbers}
-            onChange={handleCheckboxesChange}
-          />
-          <label htmlFor="chars-numbers" className='text-zinc-300'>Numbers</label>
-        </div>
+        <CustomCheckbox
+          id='chars-numbers'
+          label='numbers'
+          checked={numbers}
+          value="numbers"
+          onChange={handleCheckboxesChange}
+        />
 
-        <div className='flex items-center gap-4'>
-          <input
-            id="chars-symbols"
-            type='checkbox'
-            name='valid-characters'
-            value='symbols'
-            className='cursor-pointer'
-            checked={symbols}
-            onChange={handleCheckboxesChange}
-          />
-          <label htmlFor="chars-symbols" className='text-zinc-300'>Symbols</label>
-        </div>
+        <CustomCheckbox
+          id='chars-symbols'
+          label='symbols'
+          checked={symbols}
+          value="symbols"
+          onChange={handleCheckboxesChange}
+        />
       </div>
 
       <button

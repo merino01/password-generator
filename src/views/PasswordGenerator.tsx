@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import Form from '../components/Form'
-import PasswordContainer from '../components/PasswordContainer'
+import Form from '../components/PasswordGenerator/PasswordGeneratorForm'
+import PasswordContainer from '../components/PasswordGenerator/PasswordContainer'
 import generatePassword from '../components/lib/generate-password'
 import copy from '../components/lib/copy'
 

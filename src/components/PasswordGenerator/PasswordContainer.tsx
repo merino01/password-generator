@@ -1,4 +1,4 @@
-import IconCopy from "./Icons/IconCopy"
+import IconCopy from "../Icons/IconCopy"
 
 interface Props {
   password: string
