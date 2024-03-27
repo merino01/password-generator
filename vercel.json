@@ -1,5 +1,6 @@
 {
-  "redirects": [
+  "framework": "vite",
+  "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/"
