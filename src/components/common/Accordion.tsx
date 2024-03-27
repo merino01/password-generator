@@ -3,20 +3,15 @@ import { useState } from "react"
 interface Props {
   children: React.ReactNode
   title: string
-  collapsedColor?: string
-  expandedColor?: string
 }
 
-const Accordion = ({ children, title, collapsedColor = 'indigo-600', expandedColor = 'indigo-100' }: Props) => {
+const Accordion = ({ children, title }: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(true)
-
-  const headerColor = `bg-${collapsedColor}`
-  const contentColor = `bg-${expandedColor}`
   
   return (
     <div className="overflow-hidden rounded-lg shadow-lg">
       <div
-        className={`flex items-center justify-between p-5 text-white cursor-pointer ${headerColor}`}
+        className="flex items-center justify-between p-5 text-white bg-indigo-600 cursor-pointer"
         onClick={() => setCollapsed(!collapsed)}
       >
         <h2 className="text-lg font-semibold">{title}</h2>
@@ -40,7 +35,7 @@ const Accordion = ({ children, title, collapsedColor = 'indigo-600', expandedCol
       <div
         className={`overflow-hidden ${collapsed ? 'max-h-0' : 'transition-all duration-500 ease-in-out max-h-screen'}`}
       >
-        <div className={`p-5 ${contentColor}`}>
+        <div className="p-5 bg-indigo-100">
           {children}
         </div>
       </div>
