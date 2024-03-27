@@ -9,11 +9,14 @@ interface Props {
 
 const Accordion = ({ children, title, collapsedColor = 'indigo-600', expandedColor = 'indigo-100' }: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(true)
+
+  const headerColor = `bg-${collapsedColor}`
+  const contentColor = `bg-${expandedColor}`
   
   return (
     <div className="overflow-hidden rounded-lg shadow-lg">
       <div
-        className={`flex items-center justify-between p-5 text-white bg-${collapsedColor} cursor-pointer`}
+        className={`flex items-center justify-between p-5 text-white cursor-pointer ${headerColor}`}
         onClick={() => setCollapsed(!collapsed)}
       >
         <h2 className="text-lg font-semibold">{title}</h2>
@@ -37,7 +40,7 @@ const Accordion = ({ children, title, collapsedColor = 'indigo-600', expandedCol
       <div
         className={`overflow-hidden ${collapsed ? 'max-h-0' : 'transition-all duration-500 ease-in-out max-h-screen'}`}
       >
-        <div className={`p-5 bg-${expandedColor}`}>
+        <div className={`p-5 ${contentColor}`}>
           {children}
         </div>
       </div>
