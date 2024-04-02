@@ -1,6 +1,7 @@
 import { useState } from "react"
 import CustomInput from "../common/CustomInput"
 import CustomCheckbox from "../common/CustomCheckbox"
+import { LOCAL_STORAGE_KEYS } from "../../consts"
 
 interface Props {
   onSubmit: (ev: React.FormEvent<HTMLFormElement>) => void
@@ -8,12 +9,10 @@ interface Props {
 }
 
 const getFromLocaleStorage = () => {  
-  const lowercase = localStorage.getItem('l')
-  const uppercase = localStorage.getItem('u')
-  const numbers = localStorage.getItem('n')
-  const symbols = localStorage.getItem('s')
+  const localChars = localStorage.getItem(LOCAL_STORAGE_KEYS.PASSWORD_CHARS)
+  const [lowercase, uppercase, numbers, symbols] = JSON.parse(localChars || '[]')
 
-  if (![lowercase, uppercase, numbers, symbols].some((el) => el === 'true'))
+  if (![lowercase, uppercase, numbers, symbols].some(Boolean))
     return {
       lowercase: true,
       uppercase: true,
@@ -22,10 +21,10 @@ const getFromLocaleStorage = () => {
     }
   else
     return {
-      lowercase: lowercase === 'true',
-      uppercase: uppercase === 'true',
-      numbers: numbers === 'true',
-      symbols: symbols === 'true'
+      lowercase,
+      uppercase,
+      numbers,
+      symbols
     }
 }
 
@@ -35,6 +34,7 @@ const Form = ({ onSubmit, onChange }: Props) => {
   const [uppercase, setUppercase] = useState<boolean>(localData.uppercase)
   const [numbers, setNumbers] = useState<boolean>(localData.numbers)
   const [symbols, setSymbols] = useState<boolean>(localData.symbols)
+  const passwordLength = localStorage.getItem(LOCAL_STORAGE_KEYS.PASSWORD_LENGTH) || '12'
 
   const handleLengthInput = (ev: React.FormEvent<HTMLInputElement>) => {
     const target = ev.target as HTMLInputElement
@@ -47,6 +47,7 @@ const Form = ({ onSubmit, onChange }: Props) => {
     if (num < 1) target.value = '1'
     if (num > 1500000) target.value = '1500000'
 
+    localStorage.setItem(LOCAL_STORAGE_KEYS.PASSWORD_LENGTH, target.value)
     onChange && onChange()
   }
 
@@ -92,6 +93,7 @@ const Form = ({ onSubmit, onChange }: Props) => {
         placeholder='Password length'
         autocomplete='off'
         onInput={handleLengthInput}
+        defaultValue={passwordLength}
       />
 
       <div className='flex flex-col'>

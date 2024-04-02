@@ -3,17 +3,18 @@ import Form from '../components/PasswordGenerator/PasswordGeneratorForm'
 import PasswordContainer from '../components/PasswordGenerator/PasswordContainer'
 import generatePassword from '../components/lib/generate-password'
 import copy from '../components/lib/copy'
+import { LOCAL_STORAGE_KEYS } from '../consts'
 
 const defaultPassword = generatePassword({})
 
 const getPasswordFromLocalStoage = () => {
-  const password = localStorage.getItem('lp-$1')
+  const password = localStorage.getItem(LOCAL_STORAGE_KEYS.PASSWORD)
   if (!password) return defaultPassword
   return password
 }
 
 const setPasswordToLocalStorage = (password: string) => {
-  localStorage.setItem('lp-$1', password)
+  localStorage.setItem(LOCAL_STORAGE_KEYS.PASSWORD, password)
 }
 
 function PasswordGenerator () {
@@ -39,13 +40,15 @@ function PasswordGenerator () {
       numbers: 'n',
       symbols: 's'
     }
+    let localChars: boolean[] = []
     Object.keys(localStorageMap).forEach((key) => {
       if (validCharacters.includes(key)) {
-        localStorage.setItem(localStorageMap[key], 'true')
+        localChars.push(true)
       } else {
-        localStorage.setItem(localStorageMap[key], 'false')
+        localChars.push(false)
       }
     })
+    localStorage.setItem(LOCAL_STORAGE_KEYS.PASSWORD_CHARS, JSON.stringify(localChars))
   }
   
   const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
